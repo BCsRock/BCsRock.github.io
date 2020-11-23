@@ -2,13 +2,16 @@
 
 //const Web3 = require("web3");
 
-
 const ethereumButton = document.querySelector('.enableEthereumButton');
 
 ethereumButton.addEventListener('click', () => {
   //Will Start the metamask extension
   ethereum.request({ method: 'eth_requestAccounts' });
 });
+
+let currentChainId = ethereum.chainId;
+
+tmpval = currentChainID;
 
 //Hardcoded entries after deployment of ECONOMY ecosystem
 
@@ -229,5 +232,3 @@ $(document).ready(function() {
         contractInstance.submitBallot(false, {from: web3.eth.accounts[0]});
     });
 })
-
-*/
