@@ -55,10 +55,7 @@ function handleAccountsChanged(accounts) {
   }
 }
 
-
-
-tmpval = currentChainID;
-
+tmpval = currentAccount;
 //Hardcoded entries after deployment of ECONOMY ecosystem
 
 ECOAddress = '0xE5A1249a47840FF2ed7C1fD6988d187507A91C0c';
