@@ -9,7 +9,7 @@ ethereumButton.addEventListener('click', () => {
   ethereum.request({ method: 'eth_requestAccounts' });
 });
 
-let currentChainId = ethereum.chainId;
+let currentChainId = await ethereum.chainId;
 
 tmpval = currentChainID;
 
