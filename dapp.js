@@ -15,7 +15,7 @@ ethereumButton.addEventListener('click', () => {
 
 // Normally, we would recommend the 'eth_chainId' RPC method, but it currently
 // returns incorrectly formatted chain ID values.
-let currentChainId = ethereum.chainId;
+var currentChainId = ethereum.chainId;
 
 ethereum.on('chainChanged', handleChainChanged);
 
@@ -56,6 +56,7 @@ function handleAccountsChanged(accounts) {
 }
 
 tmpval = currentAccount;
+
 //Hardcoded entries after deployment of ECONOMY ecosystem
 
 ECOAddress = '0xE5A1249a47840FF2ed7C1fD6988d187507A91C0c';
