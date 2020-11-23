@@ -2,6 +2,8 @@
 
 //const Web3 = require("web3");
 
+let web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+
 const ethereumButton = document.querySelector('.enableEthereumButton');
 
 ethereumButton.addEventListener('click', () => {
@@ -55,7 +57,11 @@ function handleAccountsChanged(accounts) {
   }
 }
 
-console.log("current account is: ", currentAccount)
+accountsTMP = await ethereum.request({ method: 'eth_accounts' }).
+
+curAccTMP = accountsTMP[0];
+
+console.log("Curr accTMP = ", curAccTMP);
 
 //Hardcoded entries after deployment of ECONOMY ecosystem
 
