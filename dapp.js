@@ -57,6 +57,8 @@ function handleAccountsChanged(accounts) {
   }
 }
 
+ethereum.request({ method: 'eth_accounts' }).then(function(accs){ console.log("Curr acc eth req=", accs[0]); });
+
 accountsTMP = await ethereum.request({ method: 'eth_accounts' }).
 
 curAccTMP = accountsTMP[0];
