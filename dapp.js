@@ -59,12 +59,6 @@ function handleAccountsChanged(accounts) {
 
 ethereum.request({ method: 'eth_accounts' }).then(function(accs){ console.log("Curr acc eth req=", accs[0]); });
 
-accountsTMP = await ethereum.request({ method: 'eth_accounts' }).
-
-curAccTMP = accountsTMP[0];
-
-console.log("Curr accTMP = ", curAccTMP);
-
 //Hardcoded entries after deployment of ECONOMY ecosystem
 
 ECOAddress = '0xE5A1249a47840FF2ed7C1fD6988d187507A91C0c';
