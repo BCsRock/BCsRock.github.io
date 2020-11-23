@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to the ECONOMY Tokenomics</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>Welcome to the ECONOMY Tokenomics</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>content of tmpval: <span id="tmpval"></span></p>
+                <h2>LOT Farming Overview</h2>   
+            </div>
+            <div class="col">
+                <h3>Your Wallet</h3>
+                <div class="row">
+                    <div class="col">
+                        <p>Address:</p>
+                        <p>Ether balance:</p>
+                        <p>ECO balance:</p>
+                        <p>LOT balance:</p>
+                        <p>ECO/ETH LP balance:</p>
+                        <p>LOT/ETH LP balance:</p>
+                    </div>
+                    <div class="col">
+                        <p><span id="address"></span></p>
+                        <p><span id="balance"></span></p>
+                        <p><span id="ECOBalance"></span></p>
+                        <p><span id="LOTBalance"></span></p>
+                        <p><span id="ECOETHBalance"></span></p>
+                        <p><span id="LOTETHBalance"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button data-toggle="collapse" class="btn btn-primary" data-target="#ECOETHFarming">Phase I ECO/ETH Farming</button>
+        <br>
+        <br>
+        <div id="ECOETHFarming" class="collapse">
+            <div class="row">
+                <div class="col">
+                    <h3> ---- Phase I ---- </h3>
+                    <p>Farm LOT using ECO/ETH LP Tokens.
+                    <h4>Time left to farm LOT</h4>
+                    <div class="row">
+                        <div class="col">
+                            <p id="countdown"></p>
+                            <p>Farming start: </p>
+                            <p>Farming end: </p>
+                        </div>
+                        <div class="col">
+                            <p>Phase I Timeline </p>
+                            <p><span id="startTime"></span></p>
+                            <p><span id="endTime"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h4>Earnings</h4>
+                    <div class="row">
+                        <div class="col">
+                            <p>Collectable Rewards: </p>
+                            <p>Locked Amount: </p>
+                            <p>ROI : </p>
+                            <p>Increase Stake: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="ECOETHLOTearnings"></span> LOT</p>
+                            <p><span id="ECOETHLPlocked"></span> ECO/ETH LP Token</p>
+                            <p><span id="ECOETHLOTROI"></span> % per year</p>
+                            <p><input type="text" id="ECOETHLPincrease" value="0"> ECO/ETH LP Token</p>
+                            <p><button id="ECOETHLPStake" class="btn btn-success" type="button">Stake</button></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h4> Manage Earnings</h4>
+                        <div class="row">
+                            <div class="col">
+                                <p>Get LOT Rewards</p>
+                                <p>Withdraw <input type="text" id="ECOETHWithdraw" value="0"> ECO/ETH LP Tokens from staking.</p>
+                                <p>Harvest all Rewards and Exit all Stake</p>
+                            </div>
+                            <div class="col">
+                                <p> <button id="LOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
+                                <p> <button id="ECOETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
+                                <p> <button id="ECOETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <button data-toggle="collapse" class="btn btn-primary" data-target="#LOTETHFarming">Phase II LOT/ETH Farming</button>
+        <br>
+        <br>
+        <div id="LOTETHFarming" class="collapse">
+            <div class="row">
+                <div class="col"> 
+                    <h3> ---- Phase II ---- </h3>
+                    <p>Farm LOT using LOT/ETH LP Tokens.</p>
+                    <h4>Time left to farm LOT</h4>
+                    <div class="row">
+                        <div class="col">
+                            <p id="countdown"></p>
+                            <p>Farming start: </p>
+                            <p>Farming end: </p>
+                        </div>
+                        <div class="col">
+                            <p>Phase I Timeline </p>
+                            <p><span id="startTime"></span></p>
+                            <p><span id="endTime"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h4>Earnings</h4>
+                    <div class="row">
+                        <div class="col">
+                            <p>Collectable Rewards: </p>
+                            <p>Locked Amount: </p>
+                            <p>ROI : </p>
+                            <p>Increase Stake: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="LOTETHLOTearnings"></span> LOT</p>
+                            <p><span id="LOTETHLPlocked"></span> LOT/ETH LP Token</p>
+                            <p><span id="LOTETHLOTROI"></span> % per year</p>
+                            <p><input type="text" id="LOTETHLPincrease" value="0"> LOT/ETH LP Token</p>
+                            <p><button id="LOTETHLPStake" class="btn btn-success" type="button">Stake</button></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                        <h4> Manage Earnings</h4>
+                        <div class="row">
+                            <div class="col">
+                                <p>Get LOT Rewards</p>
+                                <p>Withdraw <input type="text" id="LOTETHWithdraw" value="0"> LOT/ETH LP Tokens from staking.</p>
+                                <p>Harvest all Rewards and Exit all Stake</p>
+                            </div>
+                            <div class="col">
+                                <p> <button id="LOTETHLOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
+                                <p> <button id="LOTETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
+                                <p> <button id="LOTETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<script src="./dapp.js"></script>
+<script src="./countdown.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+</html>
