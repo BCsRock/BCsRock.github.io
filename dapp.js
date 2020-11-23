@@ -1,6 +1,9 @@
 //web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 
-const Web3 = require("web3");
+//const Web3 = require("web3");
+
+import Web3 from 'web3';
+
 const ethEnabled = () => {
   if (window.web3) {
     window.web3 = new Web3(window.web3.currentProvider);
