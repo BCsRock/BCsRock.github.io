@@ -1,4 +1,20 @@
-web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+//web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+
+const Web3 = require("web3");
+const ethEnabled = () => {
+  if (window.web3) {
+    window.web3 = new Web3(window.web3.currentProvider);
+    window.ethereum.enable();
+    return true;
+  }
+  return false;
+}
+
+tmpval = ethEnabled();
+
+
+
+
 abi = JSON.parse('[{"inputs":[{"internalType":"uint256","name":"_endtime","type":"uint256"},{"internalType":"string","name":"_proposal","type":"string"},{"internalType":"address[]","name":"_voters","type":"address[]"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[],"name":"endtime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"proposal","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"votesAgainst","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"votesInFavor","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"getResult","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"bool","name":"_vote","type":"bool"}],"name":"submitBallot","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getBallotOfSender","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"bool","name":"","type":"bool"},{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function","constant":true}]')
 Vote = web3.eth.contract(abi);
 
@@ -53,7 +69,7 @@ stakingEnd = new Date(stakingEnd.toNumber()*1000);
 
 var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
 
-tmpval =getECOETHLOTearnings();
+//tmpval =getECOETHLOTearnings();
 
 
 function getTmpVal() {
