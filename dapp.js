@@ -96,15 +96,15 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 //Dynamic Content based on deployed details
 
 //get this from Staking reward factory
-stakingTokenAddress = web3.toChecksumAddress(STFInstance.stakingTokens.call(0));
-rewardTokenAddress = web3.toChecksumAddress(STFInstance.rewardsToken.call());
+stakingTokenAddress = web3.utils.toChecksumAddress(STFInstance.stakingTokens.call(0));
+rewardTokenAddress = web3.utils.toChecksumAddress(STFInstance.rewardsToken.call());
 stakingRewardsGenesis = STFInstance.stakingRewardsGenesis.call();
 stakingRewardsGenesis = new Date(stakingRewardsGenesis.toNumber()*1000);
 
 
 stakingRewardsInfoByStakingToken = STFInstance.stakingRewardsInfoByStakingToken.call(stakingTokenAddress);
 
-SRAddress = web3.toChecksumAddress(stakingRewardsInfoByStakingToken[0]);
+SRAddress = web3.utils.toChecksumAddress(stakingRewardsInfoByStakingToken[0]);
 SRInstance = SR.at(SRAddress);
 
 SRlockedLPSupply = SRInstance.totalSupply.call();   //this is value in wei, not in ether
@@ -167,7 +167,7 @@ function getEndTimeEpoch() {
 }
 
 function getAddress() {
-    return web3.toChecksumAddress(web3.eth.accounts[0]);
+    return web3.utils.toChecksumAddress(ethereum.request({ method: 'eth_accounts' }).then(function(accs){accs[0]}));
 }
 
 function getBalance() {
