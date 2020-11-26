@@ -304,26 +304,30 @@ function getECOETHLOTROI() {
     return 25;
 }
 
-main() {
+function main() {
 
   getAddress().then(function(value) {
-  document.getElementById("address").innerHTML = value;
+    document.getElementById("address").innerHTML = value;
+  });
 
   getBalance().then(function(value) {
-  document.getElementById("balance").innerHTML = value;
+    document.getElementById("balance").innerHTML = value;
+  });
 
   getECOBalance().then(function(value) {
-  document.getElementById("ECOBalance").innerHTML = value;
+    document.getElementById("ECOBalance").innerHTML = value;
+  });
 
   getLOTBalance().then(function(value) {
-  document.getElementById("LOTBalance").innerHTML = value;
+    document.getElementById("LOTBalance").innerHTML = value;
+  });
 
   getECOETHBalance().then(function(value) {
-  document.getElementById("ECOETHBalance").innerHTML = value;
-
-});
-
+    document.getElementById("ECOETHBalance").innerHTML = value;
+  });
 }
+
+main()
 
 
 $(document).ready(async function() {
