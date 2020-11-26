@@ -192,8 +192,25 @@ async function getAddress() {
 }
 
 function getBalance() {
-    ether = web3.fromWei(web3.eth.getBalance(getAddress()).toString(),'ether')
-    return ether;
+
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await web3.eth.getBalance(address).then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get Ethereum balance. Error: ", error);
+    });
+
+  balance = web3.fromWei(balance,'ether')
+  return balance;
 }
 
 async function getECOBalance() {
@@ -203,12 +220,11 @@ async function getECOBalance() {
 
   await getAddress().then(
     (addr) => { address = addr;},
-    (err) => {console.log("Could not fetch Ethereuzm address. Error: ", err)}
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
   );
 
   await ECOInstance.methods.balanceOf(address).call().then(
     function(value) {
-      console.log("Value: ", value);
       balance = value;
     },
     function(error) {
@@ -219,31 +235,30 @@ async function getECOBalance() {
 
   return balance;
 
-  //ether = web3.fromWei( ECOInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
-  //return ether;
 }
-
-getECOBalance().then( (value) => { console.log("ECO balance: ", value)} )
 
 async function getLOTBalance() {
   
   let balance = 0;
+  let address = '0x0'
 
-  console.log("Inside getLOT balance. Current Account : ", currentAccount);
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
 
-  LOTInstance.methods.balanceOf(currentAccount).call().then(
+  await LOTInstance.methods.balanceOf(address).call().then(
     function(value) {
-      console.log("Value: ", value);
       balance = value;
     },
     function(error) {
       console.log("An error happened when trying to get LOT balance. Error: ", error);
     });
 
-    return balance;
+  balance = web3.utils.fromWei(balance, 'ether');
 
-    //ether = web3.utils.fromWei( LOTInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
-    //return ether;
+  return balance;
+
 }
 
 function getECOETHBalance() {
@@ -272,9 +287,24 @@ function getECOETHLOTROI() {
     return 25;
 }
 
-getECOBalance().then(function(value) {
+main() {
+
+  getAddress().then(function(value) {
+  document.getElementById("address").innerHTML = value;
+
+  getBalance().then(function(value) {
+  document.getElementById("balance").innerHTML = value;
+
+  getECOBalance().then(function(value) {
+  document.getElementById("ECOBalance").innerHTML = value;
+
+  getLOTBalance().then(function(value) {
   document.getElementById("LOTBalance").innerHTML = value;
+
 });
+
+}
+
 
 $(document).ready(async function() {
 
@@ -314,9 +344,7 @@ $(document).ready(async function() {
 
     $("#address").html(getAddress);
 
-    $("#balance").html(getBalance);
 
-    $("#ECOBalance").html( getECOBalance().then( (balance) => {balance} ) );
 
     $("#LOTBalance").html(getLOTBalance);
 
