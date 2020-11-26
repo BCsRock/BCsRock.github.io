@@ -2,7 +2,9 @@
 
 //const Web3 = require("web3");
 
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+//let web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+
+let web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/09d5929e069f4e8f9b4d4fe023495854"));
 
 const ethereumButton = document.querySelector('.enableEthereumButton');
 
