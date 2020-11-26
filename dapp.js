@@ -274,7 +274,7 @@ function getECOETHLOTROI() {
 
 $(document).ready(function() {
 
-    $("#tmpval").html(getTmpVal)
+    $("#tmpval").html(getECOBalance().then( (balance) => {balance} ) )
 
     $("#ECOBalance").html( getECOBalance().then( (balance) => {balance} ) )
 
