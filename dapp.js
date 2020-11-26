@@ -192,9 +192,10 @@ async function getAddress() {
       console.log("An error occurred when trying to get Ethereum address. Error: ", error);
     });
 
+  address = web3.utils.toChecksumAddress(address);
+  
   return address;
 
-  //return web3.utils.toChecksumAddress(ethereum.request({ method: 'eth_accounts' }).then(function(accs){accs[0]}));
 }
 
 async function getBalance() {
@@ -282,7 +283,53 @@ async function getECOETHBalance() {
       balance = value;
     },
     function(error) {
-      console.log("An error happened when trying to get ECO balance. Error: ", error);
+      console.log("An error happened when trying to get ETH/ECO balance. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
+}
+
+async function getSUSDETHBalance() {
+  
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SUSDETHInstance.methods.balanceOf(address).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ETH/sUSD balance. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
+}
+
+async function getUSDCETHBalance() {
+  
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await USDCETHInstance.methods.balanceOf(address).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ETH/USDC balance. Error: ", error);
     });
 
   balance = web3.utils.fromWei(balance, 'ether');
@@ -331,6 +378,15 @@ function main() {
   getECOETHBalance().then(function(value) {
     document.getElementById("ECOETHBalance").innerHTML = value;
   });
+
+  getSUSDETHBalance().then(function(value) {
+    document.getElementById("SUSDETHBalance").innerHTML = value;
+  });
+
+  getUSDCETHBalance().then(function(value) {
+    document.getElementById("USDCETHBalance").innerHTML = value;
+  });
+
 }
 
 main()
