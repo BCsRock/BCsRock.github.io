@@ -272,11 +272,11 @@ function getECOETHLOTROI() {
     return 25;
 }
 
-$(document).ready(function() {
+$(document).ready(async function() {
 
-    $("#tmpval").html(getECOBalance().then( (balance) => {balance} ) )
+    $("#tmpval").html(await getECOBalance().then( (balance) => {balance} ) )
 
-    $("#ECOBalance").html( getECOBalance().then( (balance) => {balance} ) )
+    $("#ECOBalance").html( await getECOBalance().then( (balance) => {balance} ) )
 
     /*
 
