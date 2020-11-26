@@ -272,6 +272,10 @@ function getECOETHLOTROI() {
     return 25;
 }
 
+getECOBalance().then(function(value) {
+  document.getElementById("LOTBalance").innerHTML = value;
+});
+
 $(document).ready(async function() {
 
     $("#tmpval").html(await getECOBalance().then( (balance) => {balance} ) )
