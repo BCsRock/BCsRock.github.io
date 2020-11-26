@@ -196,20 +196,20 @@ function getBalance() {
     return ether;
 }
 
-function getECOBalance() {
+async function getECOBalance() {
   
   let balance = 0;
 
   let address = '0x0'
 
-  getAddress().then(
+  await getAddress().then(
     (addr) => { address = addr;},
     (err) => {console.log("Error: ", err)}
   );
 
   console.log("Inside get ECO balance. Current Account : ", address);
 
-  ECOInstance.methods.balanceOf(address).call().then(
+  await ECOInstance.methods.balanceOf(address).call().then(
     function(value) {
       console.log("Value: ", value);
       balance = value;
