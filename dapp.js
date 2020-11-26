@@ -172,7 +172,20 @@ function getEndTimeEpoch() {
 }
 
 function getAddress() {
-    return web3.utils.toChecksumAddress(ethereum.request({ method: 'eth_accounts' }).then(function(accs){accs[0]}));
+  address = '0x0';
+
+  ethereum.request({ method: 'eth_accounts' }).then(
+    function(value){
+      console.log("Address found to be: ", value[0]);
+      address = value[0];
+    }, 
+    function(error){
+      console.log("An error occurred when trying to get Ethereum address. Error: ", error);
+    });
+
+  return address;
+
+  //return web3.utils.toChecksumAddress(ethereum.request({ method: 'eth_accounts' }).then(function(accs){accs[0]}));
 }
 
 function getBalance() {
@@ -181,8 +194,24 @@ function getBalance() {
 }
 
 function getECOBalance() {
-    ether = web3.fromWei( ECOInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
-    return ether;
+  
+  let balance = 0;
+
+  console.log("Inside get ECO balance. Current Account : ", currentAccount);
+
+  ECOInstance.methods.balanceOf(currentAccount).call().then(
+    function(value) {
+      console.log("Value: ", value);
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ECO balance. Error: ", error);
+    });
+
+    return balance;
+
+  //ether = web3.fromWei( ECOInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
+  //return ether;
 }
 
 function getLOTBalance() {
@@ -209,8 +238,9 @@ function getLOTBalance() {
 getLOTBalance();
 
 function getECOETHBalance() {
-    ether = web3.fromWei( ECOETHInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
-    return ether;
+  
+  //ether = web3.fromWei( ECOETHInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
+  //return ether;
 }
 
 function getLOTETHBalance() {
