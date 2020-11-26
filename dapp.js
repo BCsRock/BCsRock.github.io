@@ -174,10 +174,10 @@ function getEndTimeEpoch() {
     }
 }
 
-function getAddress() {
+async function getAddress() {
   address = '0x0';
 
-  ethereum.request({ method: 'eth_accounts' }).then(
+  await ethereum.request({ method: 'eth_accounts' }).then(
     function(value){
       console.log("Address found to be: ", value[0]);
       address = value[0];
