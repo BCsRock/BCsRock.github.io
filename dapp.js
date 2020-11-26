@@ -191,7 +191,7 @@ async function getAddress() {
   //return web3.utils.toChecksumAddress(ethereum.request({ method: 'eth_accounts' }).then(function(accs){accs[0]}));
 }
 
-function getBalance() {
+async function getBalance() {
 
   let balance = 0;
   let address = '0x0'
@@ -261,7 +261,7 @@ async function getLOTBalance() {
 
 }
 
-function getECOETHBalance() {
+async function getECOETHBalance() {
   
   let balance = 0;
   let address = '0x0'
@@ -284,17 +284,17 @@ function getECOETHBalance() {
   return balance;
 }
 
-function getLOTETHBalance() {
+async function getLOTETHBalance() {
     ether = web3.fromWei( LOTETHInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
     return ether;
 }
 
-function getECOETHLOTearnings() {
+async function getECOETHLOTearnings() {
     ether = web3.fromWei( SRInstance.earned(web3.eth.accounts[0]).toString(),'ether')
     return ether;
 }
 
-function getECOETHLPlocked() {
+async function getECOETHLPlocked() {
     ether = web3.fromWei( SRInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
     return ether;
 }
@@ -317,6 +317,9 @@ main() {
 
   getLOTBalance().then(function(value) {
   document.getElementById("LOTBalance").innerHTML = value;
+
+  getECOETHBalance().then(function(value) {
+  document.getElementById("ECOETHBalance").innerHTML = value;
 
 });
 
