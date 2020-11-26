@@ -98,6 +98,7 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 //Dynamic Content based on deployed details
 
 //get this from Staking reward factory
+/*
 stakingTokenAddress = web3.utils.toChecksumAddress(STFInstance.stakingTokens.call(0));
 rewardTokenAddress = web3.utils.toChecksumAddress(STFInstance.rewardsToken.call());
 stakingRewardsGenesis = STFInstance.stakingRewardsGenesis.call();
@@ -121,6 +122,8 @@ var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
 async function info() {
   await STFInstance.stakingTokens.call(0).then()
 }
+
+*/
 
 function getTmpVal() {
     try {
