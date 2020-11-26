@@ -118,6 +118,9 @@ var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
 
 //tmpval =getECOETHLOTearnings();
 
+async function info() {
+  await STFInstance.stakingTokens.call(0).then()
+}
 
 function getTmpVal() {
     try {
@@ -183,9 +186,27 @@ function getECOBalance() {
 }
 
 function getLOTBalance() {
-    ether = web3.fromWei( LOTInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
-    return ether;
+  
+  let balance = 0;
+
+  console.log("Inside getLOT balance. Current Account : ", currentAccount);
+
+  LOTInstance.methods.balanceOf(currentAccount).call().then(
+    function(value) {
+      console.log("Value: ", value);
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get LOT balance. Error: ", error);
+    });
+
+    return balance;
+
+    //ether = web3.utils.fromWei( LOTInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
+    //return ether;
 }
+
+getLOTBalance();
 
 function getECOETHBalance() {
     ether = web3.fromWei( ECOETHInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
