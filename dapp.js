@@ -200,9 +200,16 @@ function getECOBalance() {
   
   let balance = 0;
 
-  console.log("Inside get ECO balance. Current Account : ", currentAccount);
+  let address = '0x0'
 
-  ECOInstance.methods.balanceOf(currentAccount).call().then(
+  getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Error: ", err)}
+  );
+
+  console.log("Inside get ECO balance. Current Account : ", address);
+
+  ECOInstance.methods.balanceOf(address).call().then(
     function(value) {
       console.log("Value: ", value);
       balance = value;
@@ -217,7 +224,9 @@ function getECOBalance() {
   //return ether;
 }
 
-function getLOTBalance() {
+getECOBalance().then( (value) => { console.log("ECO balance: ", value)} )
+
+async function getLOTBalance() {
   
   let balance = 0;
 
@@ -237,8 +246,6 @@ function getLOTBalance() {
     //ether = web3.utils.fromWei( LOTInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
     //return ether;
 }
-
-getLOTBalance();
 
 function getECOETHBalance() {
   
