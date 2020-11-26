@@ -199,15 +199,12 @@ function getBalance() {
 async function getECOBalance() {
   
   let balance = 0;
-
   let address = '0x0'
 
   await getAddress().then(
     (addr) => { address = addr;},
-    (err) => {console.log("Error: ", err)}
+    (err) => {console.log("Could not fetch Ethereuzm address. Error: ", err)}
   );
-
-  console.log("Inside get ECO balance. Current Account : ", address);
 
   await ECOInstance.methods.balanceOf(address).call().then(
     function(value) {
@@ -218,7 +215,9 @@ async function getECOBalance() {
       console.log("An error happened when trying to get ECO balance. Error: ", error);
     });
 
-    return balance;
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
 
   //ether = web3.fromWei( ECOInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
   //return ether;
