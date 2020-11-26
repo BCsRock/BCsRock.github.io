@@ -273,7 +273,6 @@ function getECOETHLOTROI() {
 }
 
 $(document).ready(function() {
-    $("#proposal").html(getProposal);
 
     $("#tmpval").html(getTmpVal)
 
@@ -309,7 +308,7 @@ $(document).ready(function() {
 
     $("#balance").html(getBalance);
 
-    $("#ECOBalance").html(getECOBalance);
+    $("#ECOBalance").html(getECOBalance().then( (balance) => {balance} ) );
 
     $("#LOTBalance").html(getLOTBalance);
 
