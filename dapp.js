@@ -276,6 +276,10 @@ $(document).ready(function() {
 
     $("#tmpval").html(getTmpVal)
 
+    $("#ECOBalance").html( getECOBalance().then( (balance) => {balance} ) )
+
+    /*
+
     $("#startTime").html(stakingRewardsGenesis)
 
     $("#endTime").html(stakingEnd);
@@ -308,7 +312,7 @@ $(document).ready(function() {
 
     $("#balance").html(getBalance);
 
-    $("#ECOBalance").html(getECOBalance().then( (balance) => {balance} ) );
+    $("#ECOBalance").html( getECOBalance().then( (balance) => {balance} ) );
 
     $("#LOTBalance").html(getLOTBalance);
 
@@ -340,4 +344,6 @@ $(document).ready(function() {
     $("#no").click(function() {
         contractInstance.submitBallot(false, {from: web3.eth.accounts[0]});
     });
+
+    */
 })
