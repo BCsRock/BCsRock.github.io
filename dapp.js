@@ -145,27 +145,22 @@ async function getPhaseIStart() {
 
 }
 
-//TODO: get phaseI end for each reward token, deploy first
 async function getPhaseIEnd() {
   let end = 0;
-  await STFInstance.methods.stakingRewardsGenesis().call().then(
-  function(value){
-      start = value;
+  await SRInstance.methods.periodFinish.call().call().then(
+    function(value){
+      end = value;
     }, 
     function(error){
-      console.log("An error occurred when trying to get Phase I start time. Error: ", error);
+      console.log("An error occurred when trying to get Phase I ECOETH end time. Error: ", error);
     });
 
-  start = new Number(start);
-  start = new Date(start.valueOf()*1000);
+  end = new Number(end);
+  end = new Date(end.valueOf()*1000);
 
-  return start.toLocaleString();
+  return end.toLocaleString();
 
 }
-
-//stakingEnd = SRInstance.methods.periodFinish.call();
-//stakingEnd = new Date(stakingEnd.toNumber()*1000);
-
 
 /*
 stakingTokenAddress = web3.utils.toChecksumAddress(STFInstance.stakingTokens.call(0));
@@ -453,6 +448,10 @@ function PhaseI() {
 
   getPhaseIStart().then(function(value) {
     document.getElementById("startTime").innerHTML = value;
+  });
+
+  getPhaseIEnd().then(function(value) {
+    document.getElementById("endTime").innerHTML = value;
   });
 
 }
