@@ -68,7 +68,7 @@ ECOETHAddress = '0xfa9A0ff2E443d38143B5C65EE511670051A395EF';
 SUSDETHAddress = '0x1006400E1272a07EDde5a11F71C4116fe655Dd34';
 USDCETHAddress = '0xbc30AaA8e99d0f0e435FC938034850c2fC77f753';
 LOTAddress = '0x8dFd6143B6C2cdBF469a84c7Aa9416Fbb5aDb711';
-StakingRewardFactoryAddress = '0xaA707AFDdf80B99b9Db9e771b996Da243D934570'
+StakingRewardFactoryAddress = '0x3E9272Ac525C7c23cDd3797b592D9ab0b2b21D90'
 
 const ECOabi = JSON.parse('[{"inputs":[{"internalType":"uint256","name":"initialSupply","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function","constant":true},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]');
 //ECO = web3.eth.contract(ECOabi);
@@ -103,15 +103,10 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 
 //Dynamic Content based on deployed details
 
-//get this from Staking reward factory
-
-//stakingRewardsGenesis = STFInstance.stakingRewardsGenesis.call();
-
 async function getPhaseIStart() {
   let start = 0;
   await STFInstance.methods.stakingRewardsGenesis().call().then(
   function(value){
-      console.log("start found to be: ", value);
       start = value;
     }, 
     function(error){
@@ -124,11 +119,32 @@ async function getPhaseIStart() {
   return start.toLocaleString();
 
 }
+
+//TODO: get phaseI end for each reward token, deploy first
+async function getPhaseIEnd() {
+  let end = 0;
+  await STFInstance.methods.stakingRewardsGenesis().call().then(
+  function(value){
+      start = value;
+    }, 
+    function(error){
+      console.log("An error occurred when trying to get Phase I start time. Error: ", error);
+    });
+
+  start = new Number(start);
+  start = new Date(start.valueOf()*1000);
+
+  return start.toLocaleString();
+
+}
+
+stakingEnd = SRInstance.periodFinish.call();
+stakingEnd = new Date(stakingEnd.toNumber()*1000);
+
+
 /*
 stakingTokenAddress = web3.utils.toChecksumAddress(STFInstance.stakingTokens.call(0));
 rewardTokenAddress = web3.utils.toChecksumAddress(STFInstance.rewardsToken.call());
-stakingRewardsGenesis = STFInstance.stakingRewardsGenesis.call();
-stakingRewardsGenesis = new Date(stakingRewardsGenesis.toNumber()*1000);
 
 
 stakingRewardsInfoByStakingToken = STFInstance.stakingRewardsInfoByStakingToken.call(stakingTokenAddress);
@@ -138,8 +154,7 @@ SRInstance = SR.at(SRAddress);
 
 SRlockedLPSupply = SRInstance.totalSupply.call();   //this is value in wei, not in ether
 
-stakingEnd = SRInstance.periodFinish.call();
-stakingEnd = new Date(stakingEnd.toNumber()*1000);
+
 
 var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
 
