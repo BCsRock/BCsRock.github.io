@@ -102,13 +102,15 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 
 let SRInfo;
 let SRAddress;
+let SRAmount;
 let SRInstance;
 
 async function initStakingRewardContracts() {
-  await STFInstance.stakingRewardsInfoByStakingToken(ECOETHAddress).then(
+  await STFInstance.methods.stakingRewardsInfoByStakingToken(ECOETHAddress).call().then(
     function(value){
       SRInfo = value;
-      SRAddress = SRInfo.stakingRewards;
+      SRAddress = value[0];
+      SRAmount = value[1];
     }, 
     function(error){
       console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
@@ -161,8 +163,8 @@ async function getPhaseIEnd() {
 
 }
 
-stakingEnd = SRInstance.periodFinish.call();
-stakingEnd = new Date(stakingEnd.toNumber()*1000);
+//stakingEnd = SRInstance.periodFinish.call();
+//stakingEnd = new Date(stakingEnd.toNumber()*1000);
 
 
 /*
