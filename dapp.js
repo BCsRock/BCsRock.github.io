@@ -105,10 +105,10 @@ let SRAddress;
 let SRInstance;
 
 async function initStakingRewardContracts() {
-  await STFInstance.stakingRewardsInfoByStakingToken(stakingTokenAddress).then(
+  await STFInstance.stakingRewardsInfoByStakingToken(ECOETHAddress).then(
     function(value){
       SRInfo = value;
-      SRAddress = SRInfo.stakingRewards;
+      SRAddress = await SRInfo.stakingRewards;
     }, 
     function(error){
       console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
