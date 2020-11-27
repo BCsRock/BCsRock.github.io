@@ -120,7 +120,7 @@ async function initStakingRewardContracts() {
 
 }
 
-await initStakingRewardContracts();
+initStakingRewardContracts();
 
   
         
