@@ -103,16 +103,22 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 let SRInfo;
 let SRAddress;
 let SRInstance;
-await STFInstance.stakingRewardsInfoByStakingToken(stakingTokenAddress).then(
-  function(value){
-    SRInfo = value;
-    SRAddress = SRInfo.stakingRewards;
-  }, 
-  function(error){
-    console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
+
+async function initStakingRewardContracts() {
+  await STFInstance.stakingRewardsInfoByStakingToken(stakingTokenAddress).then(
+    function(value){
+      SRInfo = value;
+      SRAddress = SRInfo.stakingRewards;
+    }, 
+    function(error){
+      console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
   });
 
-SRInstance = new web3.eth.Contract(SRabi, SRAddress);
+  SRInstance = new web3.eth.Contract(SRabi, SRAddress);
+
+}
+
+initStakingRewardContracts();
 
   
         
