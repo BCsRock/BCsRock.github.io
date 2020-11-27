@@ -108,7 +108,7 @@ async function initStakingRewardContracts() {
   await STFInstance.stakingRewardsInfoByStakingToken(ECOETHAddress).then(
     function(value){
       SRInfo = value;
-      SRAddress = await SRInfo.stakingRewards;
+      SRAddress = SRInfo.stakingRewards;
     }, 
     function(error){
       console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
