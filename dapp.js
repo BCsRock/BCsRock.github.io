@@ -412,45 +412,45 @@ function getECOETHLOTROI() {
     return 25;
 }
 
-function main() {
+async function main() {
 
-  getAddress().then(function(value) {
+  await getAddress().then(function(value) {
     document.getElementById("address").innerHTML = value;
   });
 
-  getBalance().then(function(value) {
+  await getBalance().then(function(value) {
     document.getElementById("balance").innerHTML = value;
   });
 
-  getECOBalance().then(function(value) {
+  await getECOBalance().then(function(value) {
     document.getElementById("ECOBalance").innerHTML = value;
   });
 
-  getLOTBalance().then(function(value) {
+  await getLOTBalance().then(function(value) {
     document.getElementById("LOTBalance").innerHTML = value;
   });
 
-  getECOETHBalance().then(function(value) {
+  await getECOETHBalance().then(function(value) {
     document.getElementById("ECOETHBalance").innerHTML = value;
   });
 
-  getSUSDETHBalance().then(function(value) {
+  await getSUSDETHBalance().then(function(value) {
     document.getElementById("SUSDETHBalance").innerHTML = value;
   });
 
-  getUSDCETHBalance().then(function(value) {
+  await getUSDCETHBalance().then(function(value) {
     document.getElementById("USDCETHBalance").innerHTML = value;
   });
 
 }
 
-function PhaseI() {
+async function PhaseI() {
 
-  getPhaseIStart().then(function(value) {
+  await getPhaseIStart().then(function(value) {
     document.getElementById("startTime").innerHTML = value;
   });
 
-  getPhaseIEnd().then(function(value) {
+  await getPhaseIEnd().then(function(value) {
     document.getElementById("endTime").innerHTML = value;
   });
 
