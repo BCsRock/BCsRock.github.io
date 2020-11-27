@@ -100,6 +100,23 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 //SR = web3.eth.contract(SRabi);
 //SRInstance contract instance later after loading Staking Token Factory details
 
+let SRInfo;
+let SRAddress;
+let SRInstance;
+await STFInstance.stakingRewardsInfoByStakingToken(stakingTokenAddress).then(
+  function(value){
+    SRInfo = value;
+    SRAddress = SRInfo.stakingRewards;
+  }, 
+  function(error){
+    console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
+  });
+
+SRInstance = new web3.eth.Contract(SRabi, SRAddress);
+
+  
+        
+
 
 //Dynamic Content based on deployed details
 
