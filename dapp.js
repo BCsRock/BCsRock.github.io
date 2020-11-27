@@ -104,6 +104,26 @@ const SRabi = JSON.parse('[{"inputs":[{"internalType":"address","name":"_rewards
 //Dynamic Content based on deployed details
 
 //get this from Staking reward factory
+
+//stakingRewardsGenesis = STFInstance.stakingRewardsGenesis.call();
+
+async function getPhaseIStart() {
+  let start = 0;
+  await STFInstance.methods.stakingRewardsGenesis().call().then(
+  function(value){
+      console.log("start found to be: ", value);
+      start = value;
+    }, 
+    function(error){
+      console.log("An error occurred when trying to get Phase I start time. Error: ", error);
+    });
+
+  start = new Number(start);
+  start = new Date(start.valueOf()*1000);
+
+  return start.toLocaleString();
+
+}
 /*
 stakingTokenAddress = web3.utils.toChecksumAddress(STFInstance.stakingTokens.call(0));
 rewardTokenAddress = web3.utils.toChecksumAddress(STFInstance.rewardsToken.call());
@@ -389,7 +409,17 @@ function main() {
 
 }
 
+function PhaseI() {
+
+  getPhaseIStart().then(function(value) {
+    document.getElementById("startTime").innerHTML = value;
+  });
+
+}
+
 main()
+
+PhaseI()
 
 
 $(document).ready(async function() {
@@ -400,7 +430,7 @@ $(document).ready(async function() {
 
     /*
 
-    $("#startTime").html(stakingRewardsGenesis)
+    
 
     $("#endTime").html(stakingEnd);
 
