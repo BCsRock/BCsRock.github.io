@@ -617,9 +617,47 @@ async function withdrawEE() {
   }
 
   updateDisplayPhaseI()
-
-
 }
+
+async function exitEE() {
+
+  var lockedAmount = 0;
+  await getECOETHLPlocked().then( (value) => { lockedAmount = value});
+
+  var expectedReward = 0;
+  await getECOETHLOTearnings().then( (value) => { expectedReward = value});
+
+  if (Number(lockedAmount) > 0 || Number(expectedReward) > 0 ) {
+
+    data = await SRInstance.methods.exit().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Exit transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to Exit ECO/ETH LP staking. Error: ", error);
+    });
+
+  } else {
+    console.log("Nothing to withdraw or get as reward.");
+  }
+
+  updateDisplayPhaseI()
+}
+
 
 async function updateDisplayPhaseI() {
 
