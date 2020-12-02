@@ -499,7 +499,7 @@ async function stakeEE() {
   var amount = document.getElementById("ECOETHLPincrease").value;
   var balance = await getECOETHBalance();
 
-  if Number(amount) > 0 && Number(amount) <= Number(balance) {
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
 
     amount = web3.utils.toWei(amount, 'ether');
 
