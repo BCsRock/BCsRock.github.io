@@ -574,9 +574,50 @@ async function harvestEE(){
     });
   } else {
     console.log("Found no rewards to collect.")
+    return 0;
   }
 
   updateDisplayPhaseI();
+
+}
+
+async function withdrawEE() {
+
+  var amount = document.getElementById("ECOETHWithdraw").value;
+  var balance = await getECOETHLPlocked();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRInstance.methods.withdraw(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Withdraw transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to withdraw ECO/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid withdrawal amount of ECO/ETH LP token.");
+  }
+
+  updateDisplayPhaseI()
+
 
 }
 
@@ -590,17 +631,14 @@ async function updateDisplayPhaseI() {
     document.getElementById("ECOETHLPlocked").innerHTML = value;
   });
 
+  main()
+
 }
 
 
     /*
 
     
-
-    
-    $("#LOTHarvest").click(async function() {
-        await SRInstance.getReward();
-    });
 
     $("#ECOETHWithdrawBTN").click(async function() {
 
