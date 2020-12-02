@@ -415,8 +415,25 @@ async function getECOETHLOTearnings() {
 }
 
 async function getECOETHLPlocked() {
-    ether = web3.utils.fromWei( SRInstance.methods.balanceOf(currentAccount).toString(),'ether')
-    return ether;
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await ECOETHInstance.methods.balanceOf(address).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ETH/USDC balance. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
 }
 
 async function getCurrentNonce(account){
