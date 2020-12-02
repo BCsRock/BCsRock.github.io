@@ -207,45 +207,6 @@ function getTmpVal() {
     }
 }
 
-function getProposal() {
-    try {
-        var x = contractInstance.proposal.call();
-        return x;
-    } catch(err) {
-
-    }
-}
-
-function getResult() {
-    try {
-        var x = contractInstance.getResult.call();
-        return x;
-    } catch(err) {
-
-    } 
-}
-
-function getEndTime() {
-    try {
-        var x = contractInstance.endtime.call();  //this is unix time
-        var myDate = new Date( x.c *1000);
-
-        return myDate.toLocaleString();
-    } catch(err) {
-
-    }
-}
-
-function getEndTimeEpoch() {
-    try {
-        var x = contractInstance.endtime.call();  //this is unix time
-        var myDate = x.c;
-
-        return myDate;
-    } catch(err) {
-
-    }
-}
 
 async function getAddress() {
   address = '0x0';
@@ -581,6 +542,10 @@ async function stakeEE() {
 }
 
 async function updateDisplayPhaseI() {
+
+  await getECOETHLOTearnings().then(function(value) {
+    document.getElementById("ECOETHLOTearnings").innerHTML = value;
+  });  
 
   await getECOETHLPlocked().then(function(value) {
     document.getElementById("ECOETHLPlocked").innerHTML = value;
