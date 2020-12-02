@@ -494,6 +494,33 @@ main()
 
 PhaseI()
 
+async function approveEE() {
+
+  var amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  data = await ECOETHInstance.methods.approve(SRAddress, amount).encodeABI();
+
+  const transactionParameters = {
+    nonce: '0x00', // ignored by MetaMask
+    gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+    gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+    to: ECOETHAddress // Required except during contract publications.
+    from: currentAccount, // must match user's active address.
+    value: '0x00', // Staking sends LP tokens, not Ether value. 
+    data, // Function signature and parameters
+    chain
+  }
+
+  const txHash = await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [transactionParameters],
+    }).then( function(hash) {
+      console.log("Transaction issued with hash: ", hash);
+    }, function(error) {
+      console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
+  });
+
+}
+
 async function stakeEE() {
 
   var amount = document.getElementById("ECOETHLPincrease").value;
