@@ -549,7 +549,7 @@ async function harvestEE(){
     expected = value;
   });
 
-  if Number(expected) > 0 {
+  if (Number(expected) > 0) {
 
     data = await SRInstance.methods.getReward().encodeABI();
 
