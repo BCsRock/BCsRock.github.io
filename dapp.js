@@ -453,7 +453,7 @@ async function buildTransaction(to, nonce, ethAmount, data, gasLimit, gasPriceGw
 async function sendTransaction(txObject){
   
   await web3.eth.sendTransaction(txObject).on('transactionHash', function(hash){
-    console.log("Transaction sent to network: ", txObject.chain, " with tx-hash: " hash);
+    console.log("Transaction sent to network: ", txObject.chain, " with tx-hash: ", hash);
   })
   .on('receipt', function(receipt){
     console.log("Transaction receipt: ", receipt);
