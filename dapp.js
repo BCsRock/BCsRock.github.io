@@ -526,7 +526,7 @@ main()
 PhaseI()
 
 async function stakeEE() {
-
+/*
   var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
 
   if ECOETHLPStakeIncrease <= 0 {
@@ -539,7 +539,7 @@ async function stakeEE() {
   amount = web3.utils.toWei(ECOETHLPStakeIncrease,'ether');
 
   SRInstance.methods.stake(amount).call().
-
+*/
 
 }
 
