@@ -114,13 +114,9 @@
                     <div class="row">
                         <div class="col">
                             <p>Collectable Rewards: </p>
-
-                            
                         </div>
                         <div class="col">
                             <p><span id="ECOETHLOTearnings"></span> LOT</p>
-                            
-
                         </div>
                     </div>
                     <div class="row">
@@ -137,8 +133,8 @@
                         </div>
                         <div class="col">
                             <p><input type="text" id="ECOETHLPincrease" value="0"> ECO/ETH LP Token</p>
-                            <p><button onclick="approveEE()" id="ECOETHLPApprove" class="btn btn-success" type="button">Approve</button></p>
-                            <p><button onclick="stakeEE()" id="ECOETHLPStake" class="btn btn-success" type="button">Stake</button></p>
+                            <p><button onclick="approveEE()" id="ECOETHLPApprove" class="btn btn-success" type="button">Approve</button> 
+                            <button onclick="stakeEE()" id="ECOETHLPStake" class="btn btn-success" type="button">Stake</button></p>
                         </div>
                     </div>                    
                 </div>
@@ -147,12 +143,24 @@
                         <div class="row">
                             <div class="col">
                                 <p>Get LOT Rewards</p>
-                                <p>Withdraw <input type="text" id="ECOETHWithdraw" value="0"> ECO/ETH LP Tokens from staking.</p>
-                                <p>Harvest all Rewards and Exit all Stake</p>
                             </div>
                             <div class="col">
                                 <p> <button onclick="harvestEE()" id="LOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Withdraw <input type="text" id="ECOETHWithdraw" value="0"> ECO/ETH LP Tokens from staking.</p>
+                            </div>
+                            <div class="col">
                                 <p> <button onclick="withdrawEE()" id="ECOETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Harvest all Rewards and Exit all Stake</p>
+                            </div>
+                            <div class="col">
                                 <p> <button onclick="exitEE()" id="ECOETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
                             </div>
                         </div>
