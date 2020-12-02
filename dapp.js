@@ -514,7 +514,7 @@ async function approveEE() {
     method: 'eth_sendTransaction',
     params: [transactionParameters],
     }).then( function(hash) {
-      console.log("Transaction issued with hash: ", hash);
+      console.log("Approve transaction issued with hash: ", hash);
     }, function(error) {
       console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
   });
@@ -547,35 +547,31 @@ async function stakeEE() {
       method: 'eth_sendTransaction',
       params: [transactionParameters],
       }).then( function(hash) {
-        console.log("Transaction issued with hash: ", hash);
+        console.log("Stake transaction issued with hash: ", hash);
       }, function(error) {
         console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
     });
+
   } else {
     console.log("Invalid ECO/ETH LP balance for staking.");
   }
+
+  updateDisplayPhaseI()
+
+
+}
+
+async function updateDisplayPhaseI() {
+
+  await getECOETHLPlocked().then(function(value) {
+    document.getElementById("ECOETHLPlocked").innerHTML = value;
+  });
+
 }
 
   
 
   
-
-
-/*
-  var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
-
-  if ECOETHLPStakeIncrease <= 0 {
-    console.log("Error: Please provide a positive stake bigger zero. Input was: ", ECOETHLPStakeIncrease)
-    return 0;
-  } 
-
-  nonce = await getCurrentNonce();
-
-  amount = web3.utils.toWei(ECOETHLPStakeIncrease,'ether');
-
-  SRInstance.methods.stake(amount).call().
-*/
-
 
     /*
 
