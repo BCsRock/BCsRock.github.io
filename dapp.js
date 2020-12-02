@@ -432,6 +432,39 @@ async function getCurrentNonce(account){
   return nonce;
 }
 
+async function buildTransaction(to, nonce, ethAmount, data, gasLimit, gasPriceGwei, chain) {
+  limit = gasLimit || 2100000
+  price = gasPriceGwei || '4'
+
+  const txObject = {
+    from: currentAccount,
+    nonce,
+    to,
+    value:    web3.utils.toHex(web3.utils.toWei(ethAmount, 'ether')),
+    gasLimit: web3.utils.toHex(limit),
+    gasPrice: web3.utils.toHex(web3.utils.toWei(price, 'gwei')),
+    data,
+    chain
+  }
+
+  return txObject
+}
+
+async function sendTransaction(txObject){
+  
+  await web3.eth.sendTransaction(txObject).on('transactionHash', function(hash){
+    console.log("Transaction sent to network: ", txObject.chain, " with tx-hash: " hash);
+  })
+  .on('receipt', function(receipt){
+    console.log("Transaction receipt: ", receipt);
+  })
+  .on('confirmation', function(confirmationNumber, receipt){
+    console.log("Confirmation Number: ", confirmationNumber, " with receipt: ", receipt)
+  })
+  .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+
+}
+
 function getECOETHLOTROI() {
     
     return 25;
@@ -500,6 +533,8 @@ async function stakeEE() {
     console.log("Error: Please provide a positive stake bigger zero. Input was: ", ECOETHLPStakeIncrease)
     return 0;
   } 
+
+  nonce = await getCurrentNonce();
 
   amount = web3.utils.toWei(ECOETHLPStakeIncrease,'ether');
 
