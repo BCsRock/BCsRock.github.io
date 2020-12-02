@@ -422,7 +422,7 @@ async function getCurrentNonce(account){
 
   let nonce = 0;
 
-  await web3.eth.getTransactionCount(account).then( { function(value) {
+  await web3.eth.getTransactionCount(account).then( function(value) {
     nonce = value;
   },
   function(error) {
