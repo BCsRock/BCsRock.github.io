@@ -541,6 +541,45 @@ async function stakeEE() {
 
 }
 
+async function harvestEE(){
+
+  var expected = 0;
+
+  await getECOETHLOTearnings().then(function(value) {
+    expected = value;
+  });
+
+  if Number(expected) > 0 {
+
+    data = await SRInstance.methods.getReward().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("getReward transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to get reward for ECO/ETH LP staking. Error: ", error);
+    });
+  } else {
+    console.log("Found no rewards to collect.")
+  }
+
+  updateDisplayPhaseI();
+
+}
+
 async function updateDisplayPhaseI() {
 
   await getECOETHLOTearnings().then(function(value) {
@@ -553,9 +592,6 @@ async function updateDisplayPhaseI() {
 
 }
 
-  
-
-  
 
     /*
 
@@ -581,36 +617,5 @@ async function updateDisplayPhaseI() {
     $("#address").html(getAddress);
 
 
-
-    $("#LOTBalance").html(getLOTBalance);
-
-    $("#ECOETHBalance").html(getECOETHBalance);
-
-    $("#LOTETHBalance").html(getLOTETHBalance);
-
-    $("#ECOETHLOTearnings").html(getECOETHLOTearnings);
-
-
-
-    $("#ECOETHLOTROI").html(getECOETHLOTROI);
-    
-    $("#yes").click(async function() {
-        console.log("web3.eth.accounts[0]: ", web3.eth.accounts[1])
-        console.log("web3.toCheckSumAddress(web3.eth.accounts[0]): ", web3.toChecksumAddress(web3.eth.accounts[1]))
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[0])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[1])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[2])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[3])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[4])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[5])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[6])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[7])});
-        await contractInstance.submitBallot(true, {from: web3.toChecksumAddress(web3.eth.accounts[8])});
-
-    });
-
-    $("#no").click(function() {
-        contractInstance.submitBallot(false, {from: web3.eth.accounts[0]});
-    });
 
     */
