@@ -440,12 +440,12 @@ async function getECOETHLPlocked() {
     (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
   );
 
-  await ECOETHInstance.methods.balanceOf(address).call().then(
+  await SRInstance.methods.balanceOf(address).call().then(
     function(value) {
       balance = value;
     },
     function(error) {
-      console.log("An error happened when trying to get ECO/ETH Locked balance. Error: ", error);
+      console.log("An error happened when trying to get ECO/ETH locked balance. Error: ", error);
     });
 
   balance = web3.utils.fromWei(balance, 'ether');
