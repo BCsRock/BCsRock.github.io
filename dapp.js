@@ -432,38 +432,6 @@ async function getCurrentNonce(account){
   return nonce;
 }
 
-async function buildTransaction(to, nonce, ethAmount, data, gasLimit, gasPriceGwei, chain) {
-  limit = gasLimit || 2100000
-  price = gasPriceGwei || '4'
-
-  const txObject = {
-    from: currentAccount,
-    nonce,
-    to,
-    value:    web3.utils.toHex(web3.utils.toWei(ethAmount, 'ether')),
-    gasLimit: web3.utils.toHex(limit),
-    gasPrice: web3.utils.toHex(web3.utils.toWei(price, 'gwei')),
-    data,
-    chain
-  }
-
-  return txObject
-}
-
-async function sendTransaction(txObject){
-  
-  await web3.eth.sendTransaction(txObject).on('transactionHash', function(hash){
-    console.log("Transaction sent to network: ", txObject.chain, " with tx-hash: ", hash);
-  })
-  .on('receipt', function(receipt){
-    console.log("Transaction receipt: ", receipt);
-  })
-  .on('confirmation', function(confirmationNumber, receipt){
-    console.log("Confirmation Number: ", confirmationNumber, " with receipt: ", receipt)
-  })
-  .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
-
-}
 
 function getECOETHLOTROI() {
     
@@ -525,7 +493,41 @@ main()
 
 PhaseI()
 
-async function stakeEE() {
+async function stakeEE(amount) {
+
+  amount = web3.utils.toWei(String(amount),'ether');
+
+  data = await SRInstance.methods.stake(amount).encodeABI();
+
+  const transactionParameters = {
+  nonce: '0x00', // ignored by MetaMask
+  gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+  gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+  to: SRAddress, // Required except during contract publications.
+  from: currentAccount, // must match user's active address.
+  value: '0x00', // Staking sends LP tokens, not Ether value. 
+  data, // Optional, but used for defining smart contract creation and interaction.
+  chain: 'ropsten'
+};
+
+// txHash is a hex string
+// As with any RPC call, it may throw an error
+const txHash = await ethereum.request({
+  method: 'eth_sendTransaction',
+  params: [transactionParameters],
+  }).then( function(hash) {
+    console.log("Transaction issued with hash: ", hash);
+  },
+  function(error) {
+    console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
+  });
+
+}
+
+
+
+
+
 /*
   var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
 
@@ -541,7 +543,6 @@ async function stakeEE() {
   SRInstance.methods.stake(amount).call().
 */
 
-}
 
     /*
 
