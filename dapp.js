@@ -509,11 +509,11 @@ async function PhaseI() {
   });
 
   await getPhaseIEnd().then(function(value) {
-    if value < new Date() {
+   /* if value < new Date() {
       document.getElementById("endTime").innerHTML = "-/-";
     } else {
       document.getElementById("endTime").innerHTML = value;
-    }  
+    }  */
   });
 
 }
