@@ -122,7 +122,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <h4>Earnings</h4>
+                    <h5>ECO/ETH Liquidity Mining</h5>
                     <div class="row">
                         <div class="col">
                             <p>Collectable Rewards: </p>
@@ -174,6 +174,122 @@
                             </div>
                             <div class="col">
                                 <p> <button onclick="exitEE()" id="ECOETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h5>sUSD/ETH Liquidity Mining</h5>
+                    <div class="row">
+                        <div class="col">
+                            <p>Collectable Rewards: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="SUSDETHLOTearnings"></span> LOT</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Locked Amount: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="SUSDETHLPlocked"></span> ECO/ETH LP Token</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Increase Stake: </p>
+                        </div>
+                        <div class="col">
+                            <p><input type="text" id="SUSDETHLPincrease" value="0"> ECO/ETH LP Token</p>
+                            <p><button onclick="approveSE()" id="SUSDETHLPApprove" class="btn btn-success" type="button">Approve</button> 
+                            <button onclick="stakeSE()" id="SUSDETHLPStake" class="btn btn-success" type="button">Stake</button></p>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="col">
+                    <h4> Manage Earnings</h4>
+                        <div class="row">
+                            <div class="col">
+                                <p>Get LOT Rewards</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="harvestSE()" id="SUSDLOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Withdraw <input type="text" id="SUSDETHWithdraw" value="0"> SUSD/ETH LP Tokens from staking.</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="withdrawSE()" id="SUSDETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Harvest all Rewards and Exit all Stake</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="exitSE()" id="SUSDETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h5>USDC/ETH Liquidity Mining</h5>
+                    <div class="row">
+                        <div class="col">
+                            <p>Collectable Rewards: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="USDCETHLOTearnings"></span> LOT</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Locked Amount: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="USDCETHLPlocked"></span> USDC/ETH LP Token</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Increase Stake: </p>
+                        </div>
+                        <div class="col">
+                            <p><input type="text" id="USDCETHLPincrease" value="0"> USDC/ETH LP Token</p>
+                            <p><button onclick="approveUE()" id="USDCETHLPApprove" class="btn btn-success" type="button">Approve</button> 
+                            <button onclick="stakeUE()" id="USDCETHLPStake" class="btn btn-success" type="button">Stake</button></p>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="col">
+                    <h4> Manage Earnings</h4>
+                        <div class="row">
+                            <div class="col">
+                                <p>Get LOT Rewards</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="harvestUE()" id="USDCLOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Withdraw <input type="text" id="USDCETHWithdraw" value="0"> USDC/ETH LP Tokens from staking.</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="withdrawUE()" id="USDCETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Harvest all Rewards and Exit all Stake</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="exitUE()" id="USDCETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
                             </div>
                         </div>
                 </div>

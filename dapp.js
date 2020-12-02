@@ -174,30 +174,6 @@ async function getPhaseIEnd() {
 
 }
 
-/*
-stakingTokenAddress = web3.utils.toChecksumAddress(STFInstance.stakingTokens.call(0));
-rewardTokenAddress = web3.utils.toChecksumAddress(STFInstance.rewardsToken.call());
-
-
-stakingRewardsInfoByStakingToken = STFInstance.stakingRewardsInfoByStakingToken.call(stakingTokenAddress);
-
-SRAddress = web3.utils.toChecksumAddress(stakingRewardsInfoByStakingToken[0]);
-SRInstance = SR.at(SRAddress);
-
-SRlockedLPSupply = SRInstance.totalSupply.call();   //this is value in wei, not in ether
-
-
-
-var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
-
-//tmpval =getECOETHLOTearnings();
-
-async function info() {
-  await STFInstance.stakingTokens.call(0).then()
-}
-
-*/
-
 function getTmpVal() {
     try {
         var x = tmpval;
@@ -392,6 +368,50 @@ async function getECOETHLOTearnings() {
   return earnings;
 }
 
+async function getSUSDETHLOTearnings() {
+  let earnings = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRSEInstance.methods.earned(address).call().then(
+    function(value) {
+      earnings = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get sUSD/ETH earnings. Error: ", error);
+    });
+
+  earnings = web3.utils.fromWei(earnings, 'ether');
+
+  return earnings;
+}
+
+async function getUSDCETHLOTearnings() {
+  let earnings = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRUEInstance.methods.earned(address).call().then(
+    function(value) {
+      earnings = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get USDC/ETH earnings. Error: ", error);
+    });
+
+  earnings = web3.utils.fromWei(earnings, 'ether');
+
+  return earnings;
+}
+
 async function getECOETHLPlocked() {
   let balance = 0;
   let address = '0x0'
@@ -414,9 +434,48 @@ async function getECOETHLPlocked() {
   return balance;
 }
 
-function getECOETHLOTROI() {
-    
-    return 25;
+async function getSUSDETHLPlocked() {
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRSEInstance.methods.balanceOf(address).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get sUSD/ETH locked balance. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
+}
+
+async function getUSDCETHLPlocked() {
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRUEInstance.methods.balanceOf(address).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get USDC/ETH locked balance. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
 }
 
 async function main() {
@@ -496,7 +555,7 @@ async function approveEE() {
     }).then( function(hash) {
       console.log("Approve transaction issued with hash: ", hash);
     }, function(error) {
-      console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
+      console.log("An error happened when trying to aprove ECO/ETH LP. Error: ", error);
   });
 
 }
@@ -658,6 +717,374 @@ async function exitEE() {
   updateDisplayPhaseI()
 }
 
+async function approveSE() {
+
+  var amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  data = await SUSDETHInstance.methods.approve(SRSEAddress, amount).encodeABI();
+
+  const transactionParameters = {
+    nonce: '0x00', // ignored by MetaMask
+    gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+    gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+    to: SUSDETHAddress, // Required except during contract publications.
+    from: currentAccount, // must match user's active address.
+    value: '0x00', // Staking sends LP tokens, not Ether value. 
+    data, // Function signature and parameters
+    chain
+  }
+
+  const txHash = await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [transactionParameters],
+    }).then( function(hash) {
+      console.log("Approve transaction issued with hash: ", hash);
+    }, function(error) {
+      console.log("An error happened when trying to approve sUSD/ETH LP. Error: ", error);
+  });
+
+}
+
+async function stakeSE() {
+
+  var amount = document.getElementById("SUSDETHLPincrease").value;
+  var balance = await getSUSDETHBalance();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRSEInstance.methods.stake(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRSEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Stake transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to stake sUSD/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid sUSD/ETH LP balance for staking.");
+  }
+
+  updateDisplayPhaseI()
+
+
+}
+
+async function harvestSE(){
+
+  var expected = 0;
+
+  await getSUSDETHLOTearnings().then(function(value) {
+    expected = value;
+  });
+
+  if (Number(expected) > 0) {
+
+    data = await SRSEInstance.methods.getReward().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRSEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("getReward transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to get reward for sUSD/ETH LP staking. Error: ", error);
+    });
+  } else {
+    console.log("Found no rewards to collect.")
+    return 0;
+  }
+
+  updateDisplayPhaseI();
+
+}
+
+async function withdrawSE() {
+
+  var amount = document.getElementById("SUSDETHWithdraw").value;
+  var balance = await getSUSDETHLPlocked();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRSEInstance.methods.withdraw(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRSEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Withdraw transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to withdraw sUSD/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid withdrawal amount of sUSD/ETH LP token.");
+  }
+
+  updateDisplayPhaseI()
+}
+
+async function exitSE() {
+
+  var lockedAmount = 0;
+  await getSUSDETHLPlocked().then( (value) => { lockedAmount = value});
+
+  var expectedReward = 0;
+  await getSUSDETHLOTearnings().then( (value) => { expectedReward = value});
+
+  if (Number(lockedAmount) > 0 || Number(expectedReward) > 0 ) {
+
+    data = await SRSEInstance.methods.exit().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRSEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Exit transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to Exit sUSD/ETH LP staking. Error: ", error);
+    });
+
+  } else {
+    console.log("Nothing to withdraw or get as reward.");
+  }
+
+  updateDisplayPhaseI()
+}
+
+async function approveUE() {
+
+  var amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  data = await USDCETHInstance.methods.approve(SRUEAddress, amount).encodeABI();
+
+  const transactionParameters = {
+    nonce: '0x00', // ignored by MetaMask
+    gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+    gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+    to: USDCETHAddress, // Required except during contract publications.
+    from: currentAccount, // must match user's active address.
+    value: '0x00', // Staking sends LP tokens, not Ether value. 
+    data, // Function signature and parameters
+    chain
+  }
+
+  const txHash = await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [transactionParameters],
+    }).then( function(hash) {
+      console.log("Approve transaction issued with hash: ", hash);
+    }, function(error) {
+      console.log("An error happened when trying to approve USDC/ETH LP. Error: ", error);
+  });
+
+}
+
+async function stakeUE() {
+
+  var amount = document.getElementById("USDCETHLPincrease").value;
+  var balance = await getUSDCETHBalance();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRUEInstance.methods.stake(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRUEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Stake transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to stake USDC/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid USDC/ETH LP balance for staking.");
+  }
+
+  updateDisplayPhaseI()
+
+
+}
+
+async function harvestUE(){
+
+  var expected = 0;
+
+  await getUSDCETHLOTearnings().then(function(value) {
+    expected = value;
+  });
+
+  if (Number(expected) > 0) {
+
+    data = await SRUEInstance.methods.getReward().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRUEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("getReward transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to get reward for USDC/ETH LP staking. Error: ", error);
+    });
+  } else {
+    console.log("Found no rewards to collect.")
+    return 0;
+  }
+
+  updateDisplayPhaseI();
+
+}
+
+async function withdrawUE() {
+
+  var amount = document.getElementById("USDCETHWithdraw").value;
+  var balance = await getUSDCETHLPlocked();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRUEInstance.methods.withdraw(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRUEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Withdraw transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to withdraw USDC/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid withdrawal amount of ECO/ETH LP token.");
+  }
+
+  updateDisplayPhaseI()
+}
+
+async function exitUE() {
+
+  var lockedAmount = 0;
+  await getUSDCETHLPlocked().then( (value) => { lockedAmount = value});
+
+  var expectedReward = 0;
+  await getUSDCETHLOTearnings().then( (value) => { expectedReward = value});
+
+  if (Number(lockedAmount) > 0 || Number(expectedReward) > 0 ) {
+
+    data = await SRUEInstance.methods.exit().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRUEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Exit transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to Exit USDC/ETH LP staking. Error: ", error);
+    });
+
+  } else {
+    console.log("Nothing to withdraw or get as reward.");
+  }
+
+  updateDisplayPhaseI()
+}
+
 
 async function updateDisplayPhaseI() {
 
@@ -669,29 +1096,22 @@ async function updateDisplayPhaseI() {
     document.getElementById("ECOETHLPlocked").innerHTML = value;
   });
 
+  await getSUSDETHLOTearnings().then(function(value) {
+    document.getElementById("SUSDETHLOTearnings").innerHTML = value;
+  });  
+
+  await getSUSDETHLPlocked().then(function(value) {
+    document.getElementById("SUSDETHLPlocked").innerHTML = value;
+  });
+
+  await getUSDCETHLOTearnings().then(function(value) {
+    document.getElementById("USDCETHLOTearnings").innerHTML = value;
+  });  
+
+  await getUSDCETHLPlocked().then(function(value) {
+    document.getElementById("USDCETHLPlocked").innerHTML = value;
+  });
+
   main()
 
 }
-
-
-    /*
-
-    
-
-    $("#ECOETHWithdrawBTN").click(async function() {
-
-        var amount = document.getElementById("ECOETHWithdraw").value;
-        amount = web3.toWei(String(amount),'ether');
-
-        await SRInstance.withdraw(amount);
-    });
-    
-    $("#ECOETHExitBTN").click(async function() {
-        await SRInstance.exit();
-    });
-
-    $("#address").html(getAddress);
-
-
-
-    */
