@@ -415,7 +415,7 @@ async function getECOETHLOTearnings() {
 }
 
 async function getECOETHLPlocked() {
-    ether = web3.fromWei( SRInstance.balanceOf(web3.eth.accounts[0]).toString(),'ether')
+    ether = web3.utils.fromWei( SRInstance.methods.balanceOf(currentAccount).toString(),'ether')
     return ether;
 }
 
