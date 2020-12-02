@@ -410,8 +410,25 @@ async function getLOTETHBalance() {
 }
 
 async function getECOETHLOTearnings() {
-    ether = web3.fromWei( SRInstance.earned(web3.eth.accounts[0]).toString(),'ether')
-    return ether;
+  let earnings = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRInstance.methods.earned(address).call().then(
+    function(value) {
+      earnings = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ECO/ETH earnings. Error: ", error);
+    });
+
+  earnings = web3.utils.fromWei(earnings, 'ether');
+
+  return earnings;
 }
 
 async function getECOETHLPlocked() {
@@ -428,28 +445,13 @@ async function getECOETHLPlocked() {
       balance = value;
     },
     function(error) {
-      console.log("An error happened when trying to get ETH/USDC balance. Error: ", error);
+      console.log("An error happened when trying to get ECO/ETH Locked balance. Error: ", error);
     });
 
   balance = web3.utils.fromWei(balance, 'ether');
 
   return balance;
 }
-
-async function getCurrentNonce(account){
-
-  let nonce = 0;
-
-  await web3.eth.getTransactionCount(account).then( function(value) {
-    nonce = value;
-  },
-  function(error) {
-    console.log("An error happened when trying to get latest transaction nonce. Error: ", error);
-  });
-
-  return nonce;
-}
-
 
 function getECOETHLOTROI() {
     
@@ -594,13 +596,6 @@ async function updateDisplayPhaseI() {
 
     
 
-    $("#ECOETHLPStake").click(async function() {
-
-        var ECOETHLPStakeIncrease = document.getElementById("ECOETHLPincrease").value;
-        ECOETHLPStakeIncrease = web3.toWei(String(ECOETHLPStakeIncrease),'ether');
-
-        await SRInstance.stake(ECOETHLPStakeIncrease);
-    });
     
     $("#LOTHarvest").click(async function() {
         await SRInstance.getReward();
@@ -630,7 +625,7 @@ async function updateDisplayPhaseI() {
 
     $("#ECOETHLOTearnings").html(getECOETHLOTearnings);
 
-    $("#ECOETHLPlocked").html(getECOETHLPlocked);
+
 
     $("#ECOETHLOTROI").html(getECOETHLOTROI);
     
