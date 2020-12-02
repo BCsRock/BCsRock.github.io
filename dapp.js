@@ -5,6 +5,7 @@
 //let web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 
 let web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/09d5929e069f4e8f9b4d4fe023495854"));
+let chain = 'ropsten';
 
 const ethereumButton = document.querySelector('.enableEthereumButton');
 
@@ -493,39 +494,43 @@ main()
 
 PhaseI()
 
-async function stakeEE(amount) {
+async function stakeEE() {
 
-  amount = web3.utils.toWei(String(amount),'ether');
+  var amount = document.getElementById("ECOETHLPincrease").value;
+  var balance = await getECOETHBalance();
 
-  data = await SRInstance.methods.stake(amount).encodeABI();
+  if Number(amount) > 0 && Number(amount) <= Number(balance) {
 
-  const transactionParameters = {
-  nonce: '0x00', // ignored by MetaMask
-  gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
-  gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
-  to: SRAddress, // Required except during contract publications.
-  from: currentAccount, // must match user's active address.
-  value: '0x00', // Staking sends LP tokens, not Ether value. 
-  data, // Optional, but used for defining smart contract creation and interaction.
-  chain: 'ropsten'
-};
+    amount = web3.utils.toWei(amount, 'ether');
 
-// txHash is a hex string
-// As with any RPC call, it may throw an error
-const txHash = await ethereum.request({
-  method: 'eth_sendTransaction',
-  params: [transactionParameters],
-  }).then( function(hash) {
-    console.log("Transaction issued with hash: ", hash);
-  },
-  function(error) {
-    console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
-  });
+    data = await SRInstance.methods.stake(amount).encodeABI();
 
-}
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
 
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to stake ECO/ETH LP. Error: ", error);
+    });
+  } else {
+    console.log("Invalid ECO/ETH LP balance for staking.");
+  }
 
+  
 
+  
 
 
 /*
