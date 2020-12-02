@@ -527,6 +527,7 @@ async function stakeEE() {
   } else {
     console.log("Invalid ECO/ETH LP balance for staking.");
   }
+}
 
   
 
