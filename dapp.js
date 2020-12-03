@@ -273,6 +273,24 @@ async function getLOTBalance() {
 
 }
 
+async function getLOTTotalRewards() {
+  
+  let balance = 0;
+
+  await LOTInstance.methods.balanceOf(StakingRewardFactoryAddress).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get total LOT rewards. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
+
+}
+
 async function getECOETHBalance() {
   
   let balance = 0;
@@ -508,6 +526,10 @@ async function main() {
   await getUSDCETHBalance().then(function(value) {
     document.getElementById("USDCETHBalance").innerHTML = value;
   });
+
+  await getLOTTotalRewards().then(function(value) {
+    document.getElementById("totalLotReward").innerHTML = value;
+  })
 
 }
 
