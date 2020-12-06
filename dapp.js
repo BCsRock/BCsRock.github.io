@@ -558,12 +558,6 @@ async function main() {
     document.getElementById("totalLotReward").innerHTML = value;
   })
 
-  console.log("In main before update");
-
-  updateDisplayPhaseI();
-
-  console.log("In main after update");
-
 }
 
 async function PhaseI() {
