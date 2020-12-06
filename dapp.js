@@ -1165,6 +1165,6 @@ async function updateDisplayPhaseI() {
     document.getElementById("USDCETHLPlocked").innerHTML = value;
   });
 
-  main()
+  main();
 
 }
