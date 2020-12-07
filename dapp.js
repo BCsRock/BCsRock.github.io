@@ -105,6 +105,9 @@ let SRSEInstance;
 let SRUEAddress;  //Staking Reward Contract Address of ETH/USDC LP Staking
 let SRUEInstance;
 
+let SRLEAddress;  //Staking Reward Contract Address of LOT/USDC LP Staking
+let SRLEInstance;
+
 async function initStakingRewardContracts() {
 
   //get Staking Reward Contract of ETH/ECO
@@ -140,18 +143,29 @@ async function initStakingRewardContracts() {
 
   SRUEInstance = new web3.eth.Contract(SRabi, SRUEAddress);
 
+    //get Staking Reward Contract of ETH/LOT
+  await STFInstance.methods.stakingRewardsInfoByStakingToken(LOTETHAddress).call().then(
+    function(value){
+      SRLEAddress = value[0];
+    }, 
+    function(error){
+      console.log("An error occurred when trying to get stakingRewardsInfoByStakingToken. Error: ", error);
+  });
+
+  SRLEInstance = new web3.eth.Contract(SRabi, SRLEAddress);
+
 }
 
 initStakingRewardContracts();
 
-async function getPhaseIStart() {
+async function getStakingGenesis() {
   let start = 0;
   await STFInstance.methods.stakingRewardsGenesis().call().then(
   function(value){
       start = value;
     }, 
     function(error){
-      console.log("An error occurred when trying to get Phase I start time. Error: ", error);
+      console.log("An error occurred when trying to get staking rewards genesis. Error: ", error);
     });
 
   start = new Number(start);
@@ -161,7 +175,14 @@ async function getPhaseIStart() {
 
 }
 
+async function getPhaseIStart() {
+  let gensis = await getStakingGenesis();
+  return genesis;
+}
+
 async function getPhaseIEnd() {
+  
+  let genesis = await getStakingGenesis();
   let end = 0;
   await SRInstance.methods.periodFinish.call().call().then(
     function(value){
@@ -174,19 +195,37 @@ async function getPhaseIEnd() {
   end = new Number(end);
   end = new Date(end.valueOf()*1000);
 
+  if (end < genesis )
+    end = "Staking has not started";
+
   return end.toLocaleString();
 
 }
 
-function getTmpVal() {
-    try {
-        var x = tmpval;
-        return x;
-    } catch(err) {
-
-    }
+async function getPhaseIIStart() {
+  let gensis = await getStakingGenesis();
+  return genesis;
 }
 
+async function getPhaseIIEnd() {
+  let end = 0;
+  await SRLEInstance.methods.periodFinish.call().call().then(
+    function(value){
+      end = value;
+    }, 
+    function(error){
+      console.log("An error occurred when trying to get Phase I ECOETH end time. Error: ", error);
+    });
+
+  end = new Number(end);
+  end = new Date(end.valueOf()*1000);
+
+  if (end < genesis )
+    end = "Staking has not started";
+
+  return end.toLocaleString();
+
+}
 
 async function getAddress() {
   address = '0x0';
@@ -408,6 +447,28 @@ async function getECOETHLOTearnings() {
   return earnings;
 }
 
+async function getLOTETHLOTearnings() {
+  let earnings = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRLEInstance.methods.earned(address).call().then(
+    function(value) {
+      earnings = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ECO/ETH earnings. Error: ", error);
+    });
+
+  earnings = web3.utils.fromWei(earnings, 'ether');
+
+  return earnings;
+}
+
 async function getSUSDETHLOTearnings() {
   let earnings = 0;
   let address = '0x0'
@@ -462,6 +523,28 @@ async function getECOETHLPlocked() {
   );
 
   await SRInstance.methods.balanceOf(address).call().then(
+    function(value) {
+      balance = value;
+    },
+    function(error) {
+      console.log("An error happened when trying to get ECO/ETH locked balance. Error: ", error);
+    });
+
+  balance = web3.utils.fromWei(balance, 'ether');
+
+  return balance;
+}
+
+async function getLOTETHLPlocked() {
+  let balance = 0;
+  let address = '0x0'
+
+  await getAddress().then(
+    (addr) => { address = addr;},
+    (err) => {console.log("Could not fetch Ethereum address. Error: ", err)}
+  );
+
+  await SRLEInstance.methods.balanceOf(address).call().then(
     function(value) {
       balance = value;
     },
@@ -544,8 +627,6 @@ async function main() {
     document.getElementById("LOTETHBalance").innerHTML = value;
   });
 
-
-
   await getSUSDETHBalance().then(function(value) {
     document.getElementById("SUSDETHBalance").innerHTML = value;
   });
@@ -567,14 +648,24 @@ async function PhaseI() {
   });
 
   await getPhaseIEnd().then(function(value) {
-   /* if value < new Date() {
-      document.getElementById("endTime").innerHTML = "-/-";
-    } else {
-      document.getElementById("endTime").innerHTML = value;
-    }  */
+    document.getElementById("endTime").innerHTML = value;
   });
 
   updateDisplayPhaseI()
+
+}
+
+async function PhaseII() {
+
+  await getPhaseIIStart().then(function(value) {
+    document.getElementById("startTimePII").innerHTML = value;
+  });
+
+  await getPhaseIIEnd().then(function(value) {
+    document.getElementById("endTimePII").innerHTML = value;
+  });
+
+  updateDisplayPhaseII()
 
 }
 
@@ -768,6 +859,190 @@ async function exitEE() {
   }
 
   updateDisplayPhaseI()
+}
+
+async function approveLE() {
+
+  var amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  data = await LOTETHInstance.methods.approve(SRLEAddress, amount).encodeABI();
+
+  const transactionParameters = {
+    nonce: '0x00', // ignored by MetaMask
+    gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+    gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+    to: LOTETHAddress, // Required except during contract publications.
+    from: currentAccount, // must match user's active address.
+    value: '0x00', // Staking sends LP tokens, not Ether value. 
+    data, // Function signature and parameters
+    chain
+  }
+
+  const txHash = await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [transactionParameters],
+    }).then( function(hash) {
+      console.log("Approve transaction issued with hash: ", hash);
+    }, function(error) {
+      console.log("An error happened when trying to aprove LOT/ETH LP. Error: ", error);
+  });
+
+}
+
+async function stakeLE() {
+
+  var amount = document.getElementById("LOTETHLPincrease").value;
+  var balance = await getLOTETHBalance();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRLEInstance.methods.stake(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRLEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Stake transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to stake LOT/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid LOT/ETH LP balance for staking.");
+  }
+
+  updateDisplayPhaseII()
+
+
+}
+
+async function harvestLE(){
+
+  var expected = 0;
+
+  await getLOTETHLOTearnings().then(function(value) {
+    expected = value;
+  });
+
+  if (Number(expected) > 0) {
+
+    data = await SRLEInstance.methods.getReward().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRLEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("getReward transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to get reward for LOT/ETH LP staking. Error: ", error);
+    });
+  } else {
+    console.log("Found no rewards to collect.")
+    return 0;
+  }
+
+  updateDisplayPhaseII();
+
+}
+
+async function withdrawLE() {
+
+  var amount = document.getElementById("LOTETHWithdraw").value;
+  var balance = await getLOTETHLPlocked();
+
+  if (Number(amount) > 0 && Number(amount) <= Number(balance)) {
+
+    amount = web3.utils.toWei(amount, 'ether');
+
+    data = await SRLEInstance.methods.withdraw(amount).encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRLEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Withdraw transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to withdraw LOT/ETH LP. Error: ", error);
+    });
+
+  } else {
+    console.log("Invalid withdrawal amount of LOT/ETH LP token.");
+  }
+
+  updateDisplayPhaseII()
+}
+
+async function exitLE() {
+
+  var lockedAmount = 0;
+  await getLOTETHLPlocked().then( (value) => { lockedAmount = value});
+
+  var expectedReward = 0;
+  await getLOTETHLOTearnings().then( (value) => { expectedReward = value});
+
+  if (Number(lockedAmount) > 0 || Number(expectedReward) > 0 ) {
+
+    data = await SRLEInstance.methods.exit().encodeABI();
+
+    const transactionParameters = {
+      nonce: '0x00', // ignored by MetaMask
+      gasPrice: '0xEE6B2800', // customizable by user during MetaMask confirmation. 4 gwei in hex = 0xEE6B2800
+      gas: '0x33450', // customizable by user during MetaMask confirmation. 210000 in hex = 0x33450
+      to: SRLEAddress, // Required except during contract publications.
+      from: currentAccount, // must match user's active address.
+      value: '0x00', // Staking sends LP tokens, not Ether value. 
+      data, // Function signature and parameters
+      chain
+    }
+
+    const txHash = await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [transactionParameters],
+      }).then( function(hash) {
+        console.log("Exit transaction issued with hash: ", hash);
+      }, function(error) {
+        console.log("An error happened when trying to Exit LOT/ETH LP staking. Error: ", error);
+    });
+
+  } else {
+    console.log("Nothing to withdraw or get as reward.");
+  }
+
+  updateDisplayPhaseII()
 }
 
 async function approveSE() {
@@ -1163,6 +1438,20 @@ async function updateDisplayPhaseI() {
 
   await getUSDCETHLPlocked().then(function(value) {
     document.getElementById("USDCETHLPlocked").innerHTML = value;
+  });
+
+  main();
+
+}
+
+async function updateDisplayPhaseII() {
+
+  await getLOTETHLOTearnings().then(function(value) {
+    document.getElementById("LOTETHLOTearnings").innerHTML = value;
+  });  
+
+  await getLOTETHLPlocked().then(function(value) {
+    document.getElementById("LOTETHLPlocked").innerHTML = value;
   });
 
   main();

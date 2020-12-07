@@ -323,13 +323,25 @@
                     <div class="row">
                         <div class="col">
                             <p id="countdown"></p>
+                        </div>
+                        <div class="col">
+                            <p>Phase II Timeline </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <p>Farming start: </p>
+                        </div>                        
+                        <div class="col">
+                            <p><span id="startTimePII"></span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <p>Farming end: </p>
                         </div>
                         <div class="col">
-                            <p>Phase I Timeline </p>
-                            <p><span id="startTime"></span></p>
-                            <p><span id="endTime"></span></p>
+                            <p><span id="endTimePII"></span></p>
                         </div>
                     </div>
                 </div>
@@ -338,35 +350,58 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <h4>Earnings</h4>
+                    <h5>LOT/ETH Liquidity Mining</h5>
                     <div class="row">
                         <div class="col">
                             <p>Collectable Rewards: </p>
-                            <p>Locked Amount: </p>
-                            <p>ROI : </p>
-                            <p>Increase Stake: </p>
                         </div>
                         <div class="col">
                             <p><span id="LOTETHLOTearnings"></span> LOT</p>
-                            <p><span id="LOTETHLPlocked"></span> LOT/ETH LP Token</p>
-                            <p><span id="LOTETHLOTROI"></span> % per year</p>
-                            <p><input type="text" id="LOTETHLPincrease" value="0"> LOT/ETH LP Token</p>
-                            <p><button id="LOTETHLPStake" class="btn btn-success" type="button">Stake</button></p>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Locked Amount: </p>
+                        </div>
+                        <div class="col">
+                            <p><span id="LOTETHLPlocked"></span> LOT/ETH LP Token</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p>Increase Stake: </p>
+                        </div>
+                        <div class="col">
+                            <p><input type="text" id="LOTETHLPincrease" value="0"> LOT/ETH LP Token</p>
+                            <p><button onclick="approveLE()" id="LOTETHLPApprove" class="btn btn-success" type="button">Approve</button> 
+                            <button onclick="stakeLE()" id="LOTETHLPStake" class="btn btn-success" type="button">Stake</button></p>
+                        </div>
+                    </div>                    
                 </div>
                 <div class="col">
-                        <h4> Manage Earnings</h4>
+                    <h4> Manage Earnings</h4>
                         <div class="row">
                             <div class="col">
                                 <p>Get LOT Rewards</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="harvestLE()" id="LOTLOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <p>Withdraw <input type="text" id="LOTETHWithdraw" value="0"> LOT/ETH LP Tokens from staking.</p>
+                            </div>
+                            <div class="col">
+                                <p> <button onclick="withdrawLE()" id="LOTETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <p>Harvest all Rewards and Exit all Stake</p>
                             </div>
                             <div class="col">
-                                <p> <button id="LOTETHLOTHarvest" class="btn btn-success" type="button">Harvest</button></p>
-                                <p> <button id="LOTETHWithdrawBTN" class="btn btn-danger" type="button">Withdraw</button> </p>
-                                <p> <button id="LOTETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
+                                <p> <button onclick="exitLE()" id="LOTETHExitBTN" class="btn btn-danger" type="button">End Farming</button></p>
                             </div>
                         </div>
                 </div>
