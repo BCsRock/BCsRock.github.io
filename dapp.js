@@ -1468,7 +1468,7 @@ async function updateDisplayPhaseI() {
 
 async function updateDisplayPhaseII() {
 
-   await getPhaseIIStart().then(function(value) {
+  await getPhaseIIStart().then(function(value) {
     document.getElementById("startTimePII").innerHTML = value;
   });
 
