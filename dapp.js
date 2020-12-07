@@ -203,7 +203,7 @@ async function getPhaseIEnd() {
 }
 
 async function getPhaseIIStart() {
-  let gensis = await getStakingGenesis();
+  let genesis = await getStakingGenesis();
   return genesis;
 }
 
