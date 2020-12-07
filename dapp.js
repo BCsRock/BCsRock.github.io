@@ -499,14 +499,14 @@ async function getLOTETHLOTearnings() {
       earnings = value;
     },
     function(error) {
-      console.log("An error happened when trying to get ECO/ETH earnings. Error: ", error);
+      console.log("An error happened when trying to get LOT/ETH earnings. Error: ", error);
     });
 
     earnings = web3.utils.fromWei(earnings, 'ether');
 
     return earnings;
   }catch(err){
-    console.log("An error happened when trying to get ECO/ETH earnings. Error: ", err);
+    console.log("An error happened when trying to get LOT/ETH earnings. Error: ", err);
     return earnings;
   }
   
