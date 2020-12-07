@@ -208,6 +208,7 @@ async function getPhaseIIStart() {
 }
 
 async function getPhaseIIEnd() {
+  let genesis = await getStakingGenesis();
   let end = 0;
   await SRLEInstance.methods.periodFinish.call().call().then(
     function(value){
