@@ -176,7 +176,7 @@ async function getStakingGenesis() {
 }
 
 async function getPhaseIStart() {
-  let gensis = await getStakingGenesis();
+  let genesis = await getStakingGenesis();
   return genesis;
 }
 
