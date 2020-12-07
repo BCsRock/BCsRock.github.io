@@ -690,44 +690,6 @@ async function main() {
 
 }
 
-async function PhaseI() {
-
-  await getPhaseIStart().then(function(value) {
-    document.getElementById("startTime").innerHTML = value;
-  });
-
-  await getPhaseIEnd().then(function(value) {
-    document.getElementById("endTime").innerHTML = value;
-  });
-
-  updateDisplayPhaseI()
-
-}
-
-async function PhaseII() {
-
-  await getPhaseIIStart().then(function(value) {
-    document.getElementById("startTimePII").innerHTML = value;
-  });
-
-  await getPhaseIIEnd().then(function(value) {
-    document.getElementById("endTimePII").innerHTML = value;
-  });
-
-  updateDisplayPhaseII()
-
-}
-
-
-
-
-main()
-
-PhaseI()
-
-PhaseII()
-
-
 async function approveEE() {
 
   var amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
@@ -949,6 +911,7 @@ async function stakeLE() {
     amount = web3.utils.toWei(amount, 'ether');
 
     data = await SRLEInstance.methods.stake(amount).encodeABI();
+
 
     const transactionParameters = {
       nonce: '0x00', // ignored by MetaMask
@@ -1467,6 +1430,14 @@ async function exitUE() {
 
 async function updateDisplayPhaseI() {
 
+  await getPhaseIStart().then(function(value) {
+    document.getElementById("startTime").innerHTML = value;
+  });
+
+  await getPhaseIEnd().then(function(value) {
+    document.getElementById("endTime").innerHTML = value;
+  });
+
   await getECOETHLOTearnings().then(function(value) {
     document.getElementById("ECOETHLOTearnings").innerHTML = value;
   });  
@@ -1497,6 +1468,14 @@ async function updateDisplayPhaseI() {
 
 async function updateDisplayPhaseII() {
 
+   await getPhaseIIStart().then(function(value) {
+    document.getElementById("startTimePII").innerHTML = value;
+  });
+
+  await getPhaseIIEnd().then(function(value) {
+    document.getElementById("endTimePII").innerHTML = value;
+  });
+
   await getLOTETHLOTearnings().then(function(value) {
     document.getElementById("LOTETHLOTearnings").innerHTML = value;
   });  
@@ -1508,3 +1487,5 @@ async function updateDisplayPhaseII() {
   main();
 
 }
+
+main()
